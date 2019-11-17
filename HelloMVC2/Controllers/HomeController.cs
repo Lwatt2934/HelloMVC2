@@ -112,7 +112,5 @@ namespace HelloMVC2.Controllers
                 return RedirectToAction("CustomerList");
             }
         }
-
-
     }
 }
