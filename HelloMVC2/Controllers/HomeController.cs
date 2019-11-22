@@ -26,6 +26,15 @@ namespace HelloMVC2.Controllers
             cache["customers"] = customers;
         }
 
+        public PartialViewResult Basket()
+        {
+            BasketViewModel model = new BasketViewModel();
+            model.BasketCount = 5;
+            model.BasketTotal = "$100";
+
+            return PartialView(model);
+        }
+
         public ActionResult Index()
         {
             return View();
@@ -67,6 +76,10 @@ namespace HelloMVC2.Controllers
         [HttpPost]
         public ActionResult AddCustomer(Customer customer)
         {
+            if(!ModelState.IsValid) //part of the validation
+            {
+                return View(customer);
+            }
             customer.ID = Guid.NewGuid().ToString();
             customers.Add(customer);
             SaveCache();
@@ -90,8 +103,6 @@ namespace HelloMVC2.Controllers
             {
                 return View(customer);
             }
-
-            return View();
         }
 
         [HttpPost]
@@ -112,5 +123,37 @@ namespace HelloMVC2.Controllers
                 return RedirectToAction("CustomerList");
             }
         }
+
+        public ActionResult DeleteCustomer(string id)
+        {
+            Customer customer = customers.FirstOrDefault(c => c.ID == id); //use Linq 
+            if (customer == null)
+            {
+                return HttpNotFound(); //44
+            }
+            else
+            {
+                return View(customer);
+            }
+        }
+
+        [HttpPost]
+        [ActionName("DeleteCustomer")] //45
+        public ActionResult ConfirmDeleteCustomer(string Id)
+        {
+            Customer customer = customers.FirstOrDefault(c => c.ID == Id); //use Linq 
+            if (customer == null)
+            {
+                return HttpNotFound(); //44
+            }
+            else
+            {
+                customers.Remove(customer); //deletes from cache somehow...
+                return RedirectToAction("CustomerList");
+            }
+        }
+
+
+
     }
 }

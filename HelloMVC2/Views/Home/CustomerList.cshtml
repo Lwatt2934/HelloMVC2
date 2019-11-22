@@ -4,7 +4,7 @@
     ViewBag.Title = "CustomerList";
 }
 
-<h2>CustomerList</h2>
+<h2>Customer List</h2>
 
 <p>
     @Html.ActionLink("Create New", "AddCustomer")
@@ -20,7 +20,7 @@
         <th></th>
     </tr>
 
-    model is list of customers...
+    @*model is list of customers...*@
 @foreach (var item in Model) {
     <tr>
         <td>
